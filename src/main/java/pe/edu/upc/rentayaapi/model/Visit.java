@@ -19,7 +19,7 @@ import java.time.LocalTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Visita {
+public class Visit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,18 +27,18 @@ public class Visita {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "propiedad_id", nullable = false)
-    private Propiedad propiedad;
+    private Property property;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "inquilino_id", nullable = false)
-    private Usuario inquilino;
+    private User tenant;
 
     @Column(nullable = false)
-    private LocalDate fecha;
+    private LocalDate date;
 
     @Column(nullable = false)
-    private LocalTime hora;
+    private LocalTime time;
 
-    @Column(nullable = false, length = 20)
-    private String estado = "Pendiente";
+    @Column(name = "estado", nullable = false, length = 20)
+    private String status = "Pendiente";
 }

@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mensaje {
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,19 +25,19 @@ public class Mensaje {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "propiedad_id", nullable = false)
-    private Propiedad propiedad;
+    private Property property;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "emisor_id", nullable = false)
-    private Usuario emisor;
+    private User sender;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "receptor_id", nullable = false)
-    private Usuario receptor;
+    private User receiver;
 
-    @Column(nullable = false, length = 500)
-    private String contenido;
+    @Column(name = "contenido", nullable = false, length = 500)
+    private String content;
 
     @Column(name = "fecha_envio", nullable = false)
-    private LocalDateTime fechaEnvio;
+    private LocalDateTime sentAt;
 }

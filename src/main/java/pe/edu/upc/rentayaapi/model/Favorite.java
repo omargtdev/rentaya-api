@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Favorito {
+public class Favorite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +27,9 @@ public class Favorito {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false)
-    private Usuario usuario;
+    private User user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "propiedad_id", nullable = false)
-    private Propiedad propiedad;
+    private Property property;
 }

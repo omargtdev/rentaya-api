@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pe.edu.upc.rentayaapi.model.Rol;
 
 @Entity
 @Table(name = "usuario")
@@ -31,6 +32,7 @@ public class User {
     @Column(name = "telefono", nullable = false, length = 15)
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "rol", nullable = false, length = 20)
-    private String role;
+    private Rol role;
 }

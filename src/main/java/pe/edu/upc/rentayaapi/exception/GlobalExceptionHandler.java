@@ -13,7 +13,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
         Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
-            .collect(Collectors.toMap(FieldError::getField, e -> e.getDefaultMessage() != null ? e.getDefaultMessage() : "Invalid value"));
+            .collect(Collectors.toMap(
+                FieldError::getField,
+                e -> e.getDefaultMessage() != null ? e.getDefaultMessage() : "Invalid value",
+                (existing, replacement) -> existing
+            ));
         return ResponseEntity.badRequest().body(errors);
     }
     @ExceptionHandler(EmailAlreadyExistsException.class)

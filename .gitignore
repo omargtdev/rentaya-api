@@ -34,3 +34,4 @@ build/
 
 ### Local data volumes ###
 postgres_data/
+.omo

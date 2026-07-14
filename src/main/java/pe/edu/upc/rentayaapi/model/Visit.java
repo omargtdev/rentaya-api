@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Instant;
 
 @Entity
 @Table(
@@ -33,12 +34,22 @@ public class Visit {
     @JoinColumn(name = "inquilino_id", nullable = false)
     private User tenant;
 
-    @Column(nullable = false)
+    @Column(name = "fecha", nullable = false)
     private LocalDate date;
 
-    @Column(nullable = false)
+    @Column(name = "hora", nullable = false)
     private LocalTime time;
 
     @Column(name = "estado", nullable = false, length = 20)
     private String status = "Pendiente";
+
+    @Column(name = "creado_en", nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @PrePersist
+    void assignCreatedAt() {
+        if (createdAt == null) {
+            createdAt = Instant.now();
+        }
+    }
 }

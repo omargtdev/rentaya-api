@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(
@@ -46,9 +47,22 @@ public class Property {
     @Column(name = "banos", nullable = false)
     private Integer bathrooms;
 
+    @Column(name = "area")
+    private Integer area;
+
     @Column(name = "descripcion", nullable = false, columnDefinition = "text")
     private String description;
 
     @Column(name = "estado", nullable = false, length = 20)
     private String status = "Disponible";
+
+    @Column(name = "creado_en", nullable = false, updatable = false)
+    private LocalDate createdAt;
+
+    @PrePersist
+    void assignCreatedAt() {
+        if (createdAt == null) {
+            createdAt = LocalDate.now();
+        }
+    }
 }

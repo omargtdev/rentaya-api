@@ -12,6 +12,7 @@ import pe.edu.upc.rentayaapi.dto.RegisterRequest;
 import pe.edu.upc.rentayaapi.dto.RegisterResponse;
 import pe.edu.upc.rentayaapi.exception.EmailAlreadyExistsException;
 import pe.edu.upc.rentayaapi.model.Rol;
+import pe.edu.upc.rentayaapi.service.UserProfileService;
 import pe.edu.upc.rentayaapi.service.UserService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +34,9 @@ class UserControllerTest {
     @MockitoBean
     private UserService userService;
 
+    @MockitoBean
+    private UserProfileService userProfileService;
+
     @Test
     void register_shouldReturn201WhenValid() throws Exception {
         RegisterRequest request = new RegisterRequest(
@@ -49,8 +53,12 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(request)))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.firstName").value("Omar"))
+            .andExpect(jsonPath("$.lastName").value("Gutierrez"))
             .andExpect(jsonPath("$.email").value("omar@test.com"))
-            .andExpect(jsonPath("$.role").value("INQUILINO"));
+            .andExpect(jsonPath("$.phone").value("987654321"))
+            .andExpect(jsonPath("$.role").value("INQUILINO"))
+            .andExpect(jsonPath("$.password").doesNotExist());
     }
 
     @Test

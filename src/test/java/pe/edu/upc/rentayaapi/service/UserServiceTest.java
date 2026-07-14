@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pe.edu.upc.rentayaapi.dto.RegisterRequest;
 import pe.edu.upc.rentayaapi.dto.RegisterResponse;
@@ -36,7 +37,7 @@ class UserServiceTest {
             "Omar", "Gutierrez", "omar@test.com", "Password1", "987654321", Rol.INQUILINO
         );
 
-        when(userRepository.existsByEmail(request.email())).thenReturn(false);
+        when(userRepository.existsByEmailIgnoreCase(request.email())).thenReturn(false);
         when(passwordEncoder.encode(request.password())).thenReturn("hashedPassword");
 
         User savedUser = new User();
@@ -48,7 +49,7 @@ class UserServiceTest {
         savedUser.setPhone(request.phone());
         savedUser.setRole(request.role());
 
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+        when(userRepository.saveAndFlush(any(User.class))).thenReturn(savedUser);
 
         RegisterResponse response = userService.register(request);
 
@@ -59,9 +60,9 @@ class UserServiceTest {
         assertThat(response.phone()).isEqualTo("987654321");
         assertThat(response.role()).isEqualTo(Rol.INQUILINO);
 
-        verify(userRepository).existsByEmail(request.email());
+        verify(userRepository).existsByEmailIgnoreCase(request.email());
         verify(passwordEncoder).encode(request.password());
-        verify(userRepository).save(any(User.class));
+        verify(userRepository).saveAndFlush(any(User.class));
     }
 
     @Test
@@ -70,14 +71,32 @@ class UserServiceTest {
             "Omar", "Gutierrez", "omar@test.com", "Password1", "987654321", Rol.INQUILINO
         );
 
-        when(userRepository.existsByEmail(request.email())).thenReturn(true);
+        when(userRepository.existsByEmailIgnoreCase(request.email())).thenReturn(true);
 
         assertThatThrownBy(() -> userService.register(request))
             .isInstanceOf(EmailAlreadyExistsException.class)
             .hasMessageContaining("El correo ya está registrado");
 
-        verify(userRepository).existsByEmail(request.email());
+        verify(userRepository).existsByEmailIgnoreCase(request.email());
         verifyNoInteractions(passwordEncoder);
-        verify(userRepository, never()).save(any());
+        verify(userRepository, never()).saveAndFlush(any());
+    }
+
+    @Test
+    void register_shouldThrowWhenUniqueConstraintIsViolated() {
+        RegisterRequest request = new RegisterRequest(
+            "Omar", "Gutierrez", "omar@test.com", "Password1", "987654321", Rol.INQUILINO
+        );
+
+        when(userRepository.existsByEmailIgnoreCase(request.email())).thenReturn(false);
+        when(passwordEncoder.encode(request.password())).thenReturn("hashedPassword");
+        when(userRepository.saveAndFlush(any(User.class)))
+            .thenThrow(new DataIntegrityViolationException("duplicate email"));
+
+        assertThatThrownBy(() -> userService.register(request))
+            .isInstanceOf(EmailAlreadyExistsException.class)
+            .hasMessageContaining("El correo ya está registrado");
+
+        verify(userRepository).saveAndFlush(any(User.class));
     }
 }

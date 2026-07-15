@@ -34,6 +34,7 @@ ENV SERVER_PORT=8080
 ENV DB_URL=jdbc:postgresql://localhost:5433/rentaya
 ENV DB_USERNAME=postgres
 ENV DB_PASSWORD=rootroot
+ENV DB_DDL_AUTO=update
 ENV JWT_SECRET=rentaya-local-development-secret-key-2026
 ENV JWT_EXPIRATION=86400
 ENV SEED_DATA_ENABLED=false

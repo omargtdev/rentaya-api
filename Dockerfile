@@ -28,12 +28,15 @@ RUN chown -R appuser:appgroup /app
 
 USER appuser
 
-# Environment variables (override at runtime)
+# Environment variables (override at runtime via docker run -e)
+# These map to the placeholders in application.properties
 ENV SERVER_PORT=8080
-ENV SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/rentaya
-ENV SPRING_DATASOURCE_USERNAME=postgres
-ENV SPRING_DATASOURCE_PASSWORD=rootroot
-ENV SPRING_JPA_HIBERNATE_DDL_AUTO=update
+ENV DB_URL=jdbc:postgresql://localhost:5433/rentaya
+ENV DB_USERNAME=postgres
+ENV DB_PASSWORD=rootroot
+ENV JWT_SECRET=rentaya-local-development-secret-key-2026
+ENV JWT_EXPIRATION=86400
+ENV SEED_DATA_ENABLED=false
 
 EXPOSE 8080
 

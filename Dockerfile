@@ -38,6 +38,7 @@ ENV DB_DDL_AUTO=update
 ENV JWT_SECRET=rentaya-local-development-secret-key-2026
 ENV JWT_EXPIRATION=86400
 ENV SEED_DATA_ENABLED=false
+ENV CORS_ALLOWED_ORIGINS=https://rentaya-web.onrender.com
 
 EXPOSE 8080
 

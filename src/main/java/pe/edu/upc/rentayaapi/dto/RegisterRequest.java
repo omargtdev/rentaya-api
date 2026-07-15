@@ -1,7 +1,10 @@
 package pe.edu.upc.rentayaapi.dto;
+
 import jakarta.validation.constraints.*;
 import pe.edu.upc.rentayaapi.model.Rol;
+
 public record RegisterRequest(
+
     @NotBlank(message = "El nombre es obligatorio")
     @Size(max = 50, message = "El nombre debe tener máximo 50 caracteres")
     String firstName,
